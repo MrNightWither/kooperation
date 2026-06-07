@@ -13,7 +13,6 @@
     --gold-dim: rgba(201,168,76,0.12); --text: #e8e8e8; --muted: #555;
   }
   body { background: var(--bg); color: var(--text); font-family: Inter, sans-serif; min-height: 100vh; }
-
   header {
     position: sticky; top: 0; z-index: 50;
     background: rgba(10,10,13,0.92); backdrop-filter: blur(10px);
@@ -26,22 +25,21 @@
   .header-title { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
   .header-back { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-decoration: none; font-family: monospace; transition: color 0.2s; }
   .header-back:hover { color: var(--gold); }
-
   main { max-width: 520px; margin: 0 auto; padding: 32px 16px 60px; display: flex; flex-direction: column; gap: 24px; }
-
-  .intro { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; animation: fadeUp 0.5s ease both; }
-  .intro-icon { width: 64px; height: 64px; background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
-  .intro h2 { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 1.8rem; letter-spacing: 0.1em; text-transform: uppercase; background: linear-gradient(135deg,#d4a94f,#f0d080,#b8872a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .intro p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
-
-  .offers { display: flex; flex-direction: column; gap: 10px; animation: fadeUp 0.5s ease 0.1s both; }
-  .offer-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s; }
-  .offer-card:hover { border-color: rgba(201,168,76,0.3); }
-  .offer-icon { font-size: 1.3rem; }
-  .offer-name { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase; }
-  .offer-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-
-  .form-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; animation: fadeUp 0.5s ease 0.2s both; }
+  .section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 6px; height: 18px; border-radius: 3px; background: var(--gold); }
+  .block { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .partner-card { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; transition: border-color 0.2s; }
+  .partner-card:hover { border-color: rgba(201,168,76,0.3); }
+  .partner-icon { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .partner-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .partner-name { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .partner-cat { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  .partner-link { margin-left: auto; font-size: 0.7rem; color: var(--gold); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+  .partner-link:hover { opacity: 1; }
+  .empty-box { text-align: center; padding: 32px; border: 1px dashed rgba(255,255,255,0.07); border-radius: 12px; color: var(--muted); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; }
+  .spinner { width: 20px; height: 20px; border: 2px solid rgba(201,168,76,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .form-card input, .form-card textarea {
     width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
     border-radius: 10px; padding: 14px 16px; font-size: 0.85rem; color: var(--text);
@@ -49,23 +47,17 @@
   }
   .form-card input::placeholder, .form-card textarea::placeholder { color: var(--muted); }
   .form-card input:focus, .form-card textarea:focus { border-color: rgba(201,168,76,0.4); }
-  .btn {
-    width: 100%; padding: 14px; background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.4);
-    border-radius: 10px; color: var(--gold); font-family: Rajdhani, sans-serif; font-weight: 700;
-    font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .btn:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); }
+  .btn { width: 100%; padding: 14px; background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.4); border-radius: 10px; color: var(--gold); font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .btn:hover { background: rgba(201,168,76,0.2); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .msg-error { font-size: 0.75rem; color: #f87171; text-align: center; display: none; }
   .msg-success { font-size: 0.75rem; color: #4ade80; text-align: center; display: none; }
-
-  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; animation: fadeUp 0.5s ease 0.3s both; }
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
   .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
   .stat-num { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--gold); }
   .stat-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
-
   @keyframes fadeUp { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+  .fade { animation: fadeUp 0.4s ease both; }
 </style>
 </head>
 <body>
@@ -83,54 +75,76 @@
 
 <main>
 
-  <div class="intro">
-    <div class="intro-icon">✉️</div>
-    <h2>Anfrage Senden</h2>
-    <p>Interesse an einer Partnerschaft?<br>Wir melden uns zeitnah.</p>
-  </div>
-
-  <div class="offers">
-    <div class="offer-card">
-      <span class="offer-icon">🎮</span>
-      <div>
-        <div class="offer-name">Sponsored Streams</div>
-        <div class="offer-sub">Product placement & dedizierte Streams</div>
-      </div>
-    </div>
-    <div class="offer-card">
-      <span class="offer-icon">📢</span>
-      <div>
-        <div class="offer-name">Social Media</div>
-        <div class="offer-sub">TikTok, Instagram & Discord Promotion</div>
-      </div>
-    </div>
-    <div class="offer-card">
-      <span class="offer-icon">🏆</span>
-      <div>
-        <div class="offer-name">Event Sponsoring</div>
-        <div class="offer-sub">Turniere & Community-Events</div>
+  <div style="display:flex;flex-direction:column;gap:12px" class="fade">
+    <div class="section-label"><span class="dot"></span>Aktive Partner</div>
+    <div class="block" id="partnerBlock">
+      <div id="partnerLoading" style="text-align:center;padding:20px">
+        <div class="spinner"></div>
+        <span style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);font-family:monospace">Lade Partner...</span>
       </div>
     </div>
   </div>
 
-  <div class="form-card">
-    <input id="bizName" type="text" placeholder="Name / Unternehmen">
-    <input id="bizEmail" type="email" placeholder="E-Mail Adresse">
-    <textarea id="bizMsg" rows="5" placeholder="Deine Nachricht / Kooperationsidee..."></textarea>
-    <p id="bizError" class="msg-error">Bitte alle Felder ausfüllen.</p>
-    <p id="bizSuccess" class="msg-success">✅ Anfrage gesendet! Wir melden uns.</p>
-    <button id="bizSendBtn" class="btn">Anfrage senden</button>
+  <div style="display:flex;flex-direction:column;gap:12px" class="fade">
+    <div class="section-label"><span class="dot"></span>Anfrage stellen</div>
+    <div class="block form-card" style="gap:12px">
+      <input id="bizName" type="text" placeholder="Name / Unternehmen">
+      <input id="bizEmail" type="email" placeholder="E-Mail Adresse">
+      <textarea id="bizMsg" rows="5" placeholder="Deine Kooperationsidee..."></textarea>
+      <p id="bizError" class="msg-error">Bitte alle Felder ausfüllen.</p>
+      <p id="bizSuccess" class="msg-success">✅ Anfrage gesendet! Wir melden uns.</p>
+      <button id="bizSendBtn" class="btn">Anfrage senden</button>
+    </div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-num">641+</div><div class="stat-label">TikTok</div></div>
-    <div class="stat"><div class="stat-num">57+</div><div class="stat-label">Twitch</div></div>
+  <div class="stats fade">
+    <div class="stat"><div class="stat-num">645+</div><div class="stat-label">TikTok</div></div>
+    <div class="stat"><div class="stat-num">55+</div><div class="stat-label">Twitch</div></div>
     <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Schatten</div></div>
   </div>
 
 </main>
 
-<script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  projectId: "gen-lang-client-0269598757", appId: "1:611229672001:web:0846e5339a913c5948dcc0",
+  apiKey: "AIzaSyA8bBWM_HVrWLqmo3zzEUTHiIhm6_8o_nI", authDomain: "gen-lang-client-0269598757.firebaseapp.com",
+  storageBucket: "gen-lang-client-0269598757.firebasestorage.app", messagingSenderId: "611229672001"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app, "ai-studio-e11fd13d-64b0-437c-8906-e6481c206003");
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function loadPartners() {
+  try {
+    const snap = await getDocs(collection(db, 'partners'));
+    const partners = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const block = document.getElementById('partnerBlock');
+    if (partners.length === 0) {
+      block.innerHTML = '<div class="empty-box">Noch keine Partner eingetragen</div>';
+    } else {
+      block.innerHTML = partners.map(p => `
+        <div class="partner-card">
+          <div class="partner-icon">${p.logo ? `<img src="${esc(p.logo)}" alt="${esc(p.name)}">` : '🤝'}</div>
+          <div>
+            <div class="partner-name">${esc(p.name)}</div>
+            <div class="partner-cat">${esc(p.category||'')}</div>
+          </div>
+          ${p.url ? `<a class="partner-link" href="${esc(p.url)}" target="_blank" rel="noopener">→ Link</a>` : ''}
+        </div>`).join('');
+    }
+  } catch(e) {
+    document.getElementById('partnerBlock').innerHTML = '<div class="empty-box">Fehler beim Laden</div>';
+  }
+}
+
+loadPartners();
+
 const WEBHOOK = 'https://discord.com/api/webhooks/1506261871483682916/MboWlBuvEIBzn9KjAxrOuGNskmqkCuErsjGaFAIixDQmL_QyFUa8PeJ01i2VHNeYm5CO';
 
 document.getElementById('bizSendBtn').addEventListener('click', async () => {
