@@ -22,7 +22,7 @@
     --border: rgba(255,255,255,0.07); --gold: #c9a84c;
     --gold-dim: rgba(201,168,76,0.12); --text: #e8e8e8; --muted: #555;
   }
-  body { background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
+  body { background: #000000; position: relative; overflow-x: hidden; color: var(--text); font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
   header {
     position: sticky; top: 0; z-index: 50;
     background: rgba(10,10,13,0.92); backdrop-filter: blur(10px);
@@ -35,7 +35,8 @@
   .header-title { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
   .header-back { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-decoration: none; font-family: monospace; transition: color 0.2s; }
   .header-back:hover { color: var(--gold); }
-  main { max-width: 520px; margin: 0 auto; padding: 32px 16px 60px; display: flex; flex-direction: column; gap: 24px; }
+  main { max-width: 520px; margin: 0 auto; padding: 32px 16px 60px; display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 1; }
+  #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
   .section-label { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 8px; }
   .dot { width: 6px; height: 18px; border-radius: 3px; background: var(--gold); }
   .block { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
@@ -77,6 +78,8 @@
 </style>
 </head>
 <body>
+
+<canvas id="particle-canvas"></canvas>
 
 
 

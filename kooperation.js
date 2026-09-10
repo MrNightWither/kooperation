@@ -148,3 +148,52 @@ $('bizSendBtn').addEventListener('click', async () => {
     btn.disabled = false;
   }
 });
+
+// ---------- Partikel (wie auf der Eventseite) ----------
+const canvas = $('particle-canvas');
+const ctx = canvas.getContext('2d');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const particles = [];
+function resetParticle(p) {
+  p.x = Math.random() * canvas.width;
+  p.y = Math.random() * canvas.height;
+  p.r = p.r || Math.random() * 1.5 + 0.3;
+  p.dx = (Math.random() - 0.5) * 0.08;
+  p.dy = (Math.random() - 0.5) * 0.08;
+  p.life = Math.random();
+  p.alpha = Math.random() * 0.8 + 0.2;
+  return p;
+}
+for (let i = 0; i < 120; i++) particles.push(resetParticle({}));
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach((p) => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(201, 168, 76, ${p.alpha})`;
+    ctx.fill();
+    ctx.strokeStyle = `rgba(240, 208, 128, ${p.alpha * 0.5})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    p.x += p.dx;
+    p.y += p.dy;
+    p.life -= 0.004;
+    p.alpha = p.life * 0.8;
+    if (p.life <= 0) { resetParticle(p); p.life = 1; }
+    if (p.x < -p.r) p.x = canvas.width + p.r;
+    if (p.x > canvas.width + p.r) p.x = -p.r;
+    if (p.y < -p.r) p.y = canvas.height + p.r;
+    if (p.y > canvas.height + p.r) p.y = -p.r;
+  });
+  if (!reduceMotion) requestAnimationFrame(drawParticles);
+}
+drawParticles();
