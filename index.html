@@ -115,6 +115,20 @@
     .stats[data-count="5"] .stat:nth-last-child(-n+2) { grid-column: span 3; }
     .intro-title { font-size: 1.7rem; }
   }
+  /* Zurück zu allen Kanälen */
+  .nw-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 44px; padding: 0 16px 0 12px;
+    border: 1px solid rgba(201, 168, 76, 0.4); border-radius: 999px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #e8e8e8; text-decoration: none; white-space: nowrap;
+    font-family: Rajdhani, 'Arial Narrow', system-ui, sans-serif;
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase;
+    position: relative; z-index: 5;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .nw-back:hover, .nw-back:focus-visible { border-color: #c9a84c; color: #c9a84c; background: rgba(201, 168, 76, 0.08); }
+  .nw-back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
 <body>
@@ -132,7 +146,7 @@
       <div class="header-title">Kooperationen</div>
     </div>
   </div>
-  <a class="header-back" href="https://nightwither.de">← Zurück</a>
+  <a class="nw-back" href="https://nightwither.de" aria-label="Zurück zu allen Kanälen von NightWither"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Alle Kanäle</a>
 </header>
 
 <main>
