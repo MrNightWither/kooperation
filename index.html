@@ -75,6 +75,46 @@
   .form-card .consent a { color: var(--gold); }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   button:focus-visible, a:focus-visible, .form-card input:focus-visible, .form-card textarea:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* ---------- Feinschliff: schärfer, besser lesbar ---------- */
+  :root { --muted: #8a8a93; --label: #a3a3ad; }
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+  .header-sub { font-family: Inter, system-ui, sans-serif; font-size: 11px; letter-spacing: 0.18em; color: var(--muted); }
+  .header-back { font-family: Inter, system-ui, sans-serif; font-size: 12px; letter-spacing: 0.1em; color: var(--label); }
+  main { gap: 32px; padding-top: 40px; }
+  .intro-title { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 2rem; letter-spacing: 0.08em; text-transform: uppercase; background: linear-gradient(135deg, #d4a94f 0%, #f0d080 50%, #b8872a 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .intro-text { margin-top: 8px; font-size: 0.95rem; line-height: 1.6; color: #c4c4cc; max-width: 46ch; }
+  .group { display: flex; flex-direction: column; gap: 12px; }
+  .group[hidden] { display: none; }
+  .section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.2em; color: var(--label); }
+  .dot { height: 14px; width: 4px; }
+  .block { border-color: rgba(255,255,255,0.09); padding: 22px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 13px; font-weight: 500; color: var(--label); }
+  .form-card input, .form-card textarea { font-size: 0.95rem; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+  .form-card input::placeholder, .form-card textarea::placeholder { color: #6e6e78; }
+  .form-card .consent { font-size: 0.8rem; color: var(--muted); }
+  .btn { background: var(--gold); color: #0a0a0d; border-color: var(--gold); font-size: 0.95rem; letter-spacing: 0.1em; }
+  .btn:hover { background: #d8b85c; }
+  .msg-error, .msg-success { font-size: 0.85rem; }
+  .partner-name { font-size: 1rem; }
+  .partner-cat { font-size: 0.8rem; color: var(--muted); }
+  .partner-link { font-size: 0.8rem; opacity: 1; }
+  .empty-box { font-size: 0.8rem; }
+
+  /* Reichweite: immer sauber in einer Reihe, auf dem Handy ausgewogen */
+  .stats { display: grid; grid-template-columns: repeat(var(--count), 1fr); gap: 10px; }
+  .stat { padding: 16px 8px; border-color: rgba(255,255,255,0.09); }
+  .stat-num { font-size: 1.6rem; line-height: 1.1; }
+  .stat-label { font-size: 11px; letter-spacing: 0.14em; color: var(--muted); margin-top: 6px; }
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: repeat(6, 1fr); }
+    .stat { grid-column: span 2; }
+    .stats[data-count="1"] .stat { grid-column: span 6; }
+    .stats[data-count="2"] .stat, .stats[data-count="4"] .stat { grid-column: span 3; }
+    .stats[data-count="5"] .stat:nth-last-child(-n+2) { grid-column: span 3; }
+    .intro-title { font-size: 1.7rem; }
+  }
 </style>
 </head>
 <body>
@@ -97,39 +137,48 @@
 
 <main>
 
-  <div style="display:flex;flex-direction:column;gap:12px" class="fade">
-    <div class="section-label"><span class="dot"></span>Aktive Partner</div>
-    <div class="block" id="partnerBlock">
-      <div id="partnerLoading" style="text-align:center;padding:20px">
-        <div class="spinner"></div>
-        <span style="font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);font-family:monospace">Lade Partner...</span>
-      </div>
-    </div>
-  </div>
+  <section class="intro fade">
+    <h1 class="intro-title">Kooperationen</h1>
+    <p class="intro-text">Du hast eine Idee für eine Zusammenarbeit mit NightWither Unity? Hier siehst du unsere aktuelle Reichweite und kannst direkt eine Anfrage stellen.</p>
+  </section>
 
-  <div style="display:flex;flex-direction:column;gap:12px" class="fade">
-    <div class="section-label"><span class="dot"></span>Anfrage stellen</div>
-    <div class="block form-card" style="gap:12px">
-      <label class="sr-only" for="bizName">Name oder Unternehmen</label>
-      <input id="bizName" type="text" placeholder="Name / Unternehmen" maxlength="80" autocomplete="organization">
-      <label class="sr-only" for="bizEmail">E Mail Adresse</label>
-      <input id="bizEmail" type="email" placeholder="E Mail Adresse" maxlength="120" autocomplete="email">
-      <label class="sr-only" for="bizMsg">Deine Kooperationsidee</label>
-      <textarea id="bizMsg" rows="5" placeholder="Deine Kooperationsidee..." maxlength="2000"></textarea>
+  <section class="group fade">
+    <h2 class="section-label"><span class="dot"></span>Reichweite</h2>
+    <div class="stats" id="statsBlock" data-count="1" style="--count:1">
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Schatten</div></div>
+    </div>
+  </section>
+
+  <section class="group fade" id="partnerSection" hidden>
+    <h2 class="section-label"><span class="dot"></span>Aktive Partner</h2>
+    <div class="block" id="partnerBlock"></div>
+  </section>
+
+  <section class="group fade">
+    <h2 class="section-label"><span class="dot"></span>Anfrage stellen</h2>
+    <div class="block form-card">
+      <div class="field">
+        <label for="bizName">Name oder Unternehmen</label>
+        <input id="bizName" type="text" maxlength="80" autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="bizEmail">E Mail Adresse</label>
+        <input id="bizEmail" type="email" maxlength="120" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="bizMsg">Deine Idee</label>
+        <textarea id="bizMsg" rows="5" maxlength="2000" placeholder="Worum geht es, und was stellst du dir vor?"></textarea>
+      </div>
       <div class="hp" aria-hidden="true"><label for="bizWebsite">Webseite</label><input id="bizWebsite" type="text" tabindex="-1" autocomplete="off"></div>
       <label class="consent"><input id="bizConsent" type="checkbox"><span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage an den Discord Server von NightWither Unity übermittelt werden. Mehr dazu in der <a href="https://datenschutz.nightwither.de" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a>.</span></label>
       <p id="bizError" class="msg-error" role="alert">Bitte alle Felder ausfüllen.</p>
-      <p id="bizSuccess" class="msg-success" role="status">✅ Anfrage gesendet! Wir melden uns.</p>
+      <p id="bizSuccess" class="msg-success" role="status">✓ Anfrage gesendet. Wir melden uns bei dir.</p>
       <button id="bizSendBtn" class="btn" type="button">Anfrage senden</button>
     </div>
-  </div>
-
-  <div class="stats fade" id="statsBlock">
-    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Schatten</div></div>
-  </div>
+  </section>
 
 </main>
 
-<script src="kooperation.js"></script>
+<script src="kooperation.js?v=20260910d"></script>
 </body>
 </html>

@@ -66,15 +66,17 @@ function renderPartner(p) {
 }
 
 async function loadPartners() {
-  const block = $('partnerBlock');
   try {
     const res = await fetch(PARTNERS_URL, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
-    if (!res.ok) throw new Error('Status ' + res.status);
+    if (!res.ok) return;
     const json = await res.json();
-    const partners = (json.documents || []).map((d) => readFields(d.fields));
-    block.replaceChildren(...(partners.length ? partners.map(renderPartner) : [el('div', 'empty-box', 'Noch keine Partner eingetragen')]));
+    const partners = (json.documents || []).map((d) => readFields(d.fields)).filter((p) => p.name);
+    // Ohne Partner bleibt der Bereich ausgeblendet, statt eine leere Box zu zeigen
+    if (!partners.length) return;
+    $('partnerBlock').replaceChildren(...partners.map(renderPartner));
+    $('partnerSection').hidden = false;
   } catch (e) {
-    block.replaceChildren(el('div', 'empty-box', 'Fehler beim Laden'));
+    // Bereich bleibt ausgeblendet
   }
 }
 loadPartners();
@@ -94,7 +96,11 @@ async function loadStats() {
     });
     const infinity = el('div', 'stat');
     infinity.append(el('div', 'stat-num', '∞'), el('div', 'stat-label', 'Schatten'));
-    $('statsBlock').replaceChildren(...cards, infinity);
+    const block = $('statsBlock');
+    block.replaceChildren(...cards, infinity);
+    const count = Math.min(cards.length + 1, 5);
+    block.dataset.count = String(count);
+    block.style.setProperty('--count', String(count));
   } catch (e) {
     // Dann bleibt nur die Schatten Karte stehen
   }
@@ -154,17 +160,23 @@ const canvas = $('particle-canvas');
 const ctx = canvas.getContext('2d');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+let viewW = window.innerWidth;
+let viewH = window.innerHeight;
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  viewW = window.innerWidth;
+  viewH = window.innerHeight;
+  canvas.width = Math.round(viewW * dpr);
+  canvas.height = Math.round(viewH * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 const particles = [];
 function resetParticle(p) {
-  p.x = Math.random() * canvas.width;
-  p.y = Math.random() * canvas.height;
+  p.x = Math.random() * viewW;
+  p.y = Math.random() * viewH;
   p.r = p.r || Math.random() * 1.5 + 0.3;
   p.dx = (Math.random() - 0.5) * 0.08;
   p.dy = (Math.random() - 0.5) * 0.08;
@@ -175,7 +187,7 @@ function resetParticle(p) {
 for (let i = 0; i < 120; i++) particles.push(resetParticle({}));
 
 function drawParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, viewW, viewH);
   particles.forEach((p) => {
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -189,10 +201,10 @@ function drawParticles() {
     p.life -= 0.004;
     p.alpha = p.life * 0.8;
     if (p.life <= 0) { resetParticle(p); p.life = 1; }
-    if (p.x < -p.r) p.x = canvas.width + p.r;
-    if (p.x > canvas.width + p.r) p.x = -p.r;
-    if (p.y < -p.r) p.y = canvas.height + p.r;
-    if (p.y > canvas.height + p.r) p.y = -p.r;
+    if (p.x < -p.r) p.x = viewW + p.r;
+    if (p.x > viewW + p.r) p.x = -p.r;
+    if (p.y < -p.r) p.y = viewH + p.r;
+    if (p.y > viewH + p.r) p.y = -p.r;
   });
   if (!reduceMotion) requestAnimationFrame(drawParticles);
 }
