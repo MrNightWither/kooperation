@@ -62,7 +62,7 @@
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .msg-error { font-size: 0.75rem; color: #f87171; text-align: center; display: none; }
   .msg-success { font-size: 0.75rem; color: #4ade80; text-align: center; display: none; }
-  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
   .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; text-align: center; }
   .stat-num { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--gold); }
   .stat-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
@@ -121,9 +121,7 @@
     </div>
   </div>
 
-  <div class="stats fade">
-    <div class="stat"><div class="stat-num">645+</div><div class="stat-label">TikTok</div></div>
-    <div class="stat"><div class="stat-num">55+</div><div class="stat-label">Twitch</div></div>
+  <div class="stats fade" id="statsBlock">
     <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Schatten</div></div>
   </div>
 

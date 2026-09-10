@@ -1,8 +1,10 @@
 'use strict';
 
 const WORKER = 'https://nwu-anmeldung.nwu-brand.workers.dev';
-// Eigenes Firebase Projekt der Partnerliste (nur lesen)
-const PARTNERS_URL = 'https://firestore.googleapis.com/v1/projects/gen-lang-client-0269598757/databases/ai-studio-e11fd13d-64b0-437c-8906-e6481c206003/documents/partners?pageSize=100';
+// Daten kommen aus dem Admin Panel Projekt (nur lesen)
+const FIRESTORE = 'https://firestore.googleapis.com/v1/projects/adminpannel-f0aab/databases/(default)/documents/';
+const PARTNERS_URL = FIRESTORE + 'partners?pageSize=100';
+const STATS_URL = FIRESTORE + 'stats/social';
 
 const $ = (id) => document.getElementById(id);
 
@@ -76,6 +78,28 @@ async function loadPartners() {
   }
 }
 loadPartners();
+
+// ---------- Reichweite ----------
+const STAT_LABELS = [['tiktok', 'TikTok'], ['twitch', 'Twitch'], ['youtube', 'YouTube'], ['instagram', 'Instagram']];
+
+async function loadStats() {
+  try {
+    const res = await fetch(STATS_URL, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer' });
+    if (!res.ok) return;
+    const d = readFields((await res.json()).fields);
+    const cards = STAT_LABELS.filter(([key]) => d[key]).map(([key, label]) => {
+      const card = el('div', 'stat');
+      card.append(el('div', 'stat-num', d[key]), el('div', 'stat-label', label));
+      return card;
+    });
+    const infinity = el('div', 'stat');
+    infinity.append(el('div', 'stat-num', '∞'), el('div', 'stat-label', 'Schatten'));
+    $('statsBlock').replaceChildren(...cards, infinity);
+  } catch (e) {
+    // Dann bleibt nur die Schatten Karte stehen
+  }
+}
+loadStats();
 
 // ---------- Anfrage ----------
 function showError(text) {
