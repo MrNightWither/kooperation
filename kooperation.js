@@ -47,7 +47,11 @@ function renderPartner(p) {
     img.referrerPolicy = 'no-referrer';
     icon.append(img);
   } else {
-    icon.textContent = '🤝';
+    const img = document.createElement('img');
+    img.src = 'crown.webp';
+    img.alt = '';
+    img.className = 'ph';
+    icon.append(img);
   }
 
   const text = el('div');
@@ -56,7 +60,8 @@ function renderPartner(p) {
 
   const link = safeUrl(p.url);
   if (link) {
-    const a = el('a', 'partner-link', '→ Link');
+    const a = el('a', 'partner-link', 'Ansehen');
+    a.setAttribute('aria-label', (p.name || 'Partner') + ' ansehen');
     a.href = link;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
@@ -155,57 +160,61 @@ $('bizSendBtn').addEventListener('click', async () => {
   }
 });
 
-// ---------- Partikel (wie auf der Eventseite) ----------
+// ---------- Leiste ----------
+const bar = $('bar');
+const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 10);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// ---------- Partikel ----------
+// Gleiche Funkenflug wie auf Shop, Events und Spotify: die Bitmap wird mit der
+// Geraetepixeldichte multipliziert, gerechnet wird weiter in CSS-Pixeln.
 const canvas = $('particle-canvas');
 const ctx = canvas.getContext('2d');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 let viewW = window.innerWidth;
 let viewH = window.innerHeight;
+
 function resizeCanvas() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   viewW = window.innerWidth;
   viewH = window.innerHeight;
   canvas.width = Math.round(viewW * dpr);
   canvas.height = Math.round(viewH * dpr);
+  canvas.style.width = viewW + 'px';
+  canvas.style.height = viewH + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
+const PARTICLE_COUNT = viewW < 600 ? 60 : 110;
 const particles = [];
-function resetParticle(p) {
+
+function resetParticle(p, fresh) {
   p.x = Math.random() * viewW;
   p.y = Math.random() * viewH;
-  p.r = p.r || Math.random() * 1.5 + 0.3;
+  p.r = p.r || Math.random() * 1.4 + 0.3;
   p.dx = (Math.random() - 0.5) * 0.08;
-  p.dy = (Math.random() - 0.5) * 0.08;
-  p.life = Math.random();
-  p.alpha = Math.random() * 0.8 + 0.2;
+  p.dy = -Math.random() * 0.12 - 0.02;
+  p.life = fresh ? Math.random() : 1;
   return p;
 }
-for (let i = 0; i < 120; i++) particles.push(resetParticle({}));
+for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(resetParticle({}, true));
 
 function drawParticles() {
   ctx.clearRect(0, 0, viewW, viewH);
-  particles.forEach((p) => {
+  for (const p of particles) {
+    const a = Math.max(0, p.life) * 0.8;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(201, 168, 76, ${p.alpha})`;
+    ctx.fillStyle = `rgba(201, 168, 76, ${a})`;
     ctx.fill();
-    ctx.strokeStyle = `rgba(240, 208, 128, ${p.alpha * 0.5})`;
-    ctx.lineWidth = 0.5;
-    ctx.stroke();
     p.x += p.dx;
     p.y += p.dy;
-    p.life -= 0.004;
-    p.alpha = p.life * 0.8;
-    if (p.life <= 0) { resetParticle(p); p.life = 1; }
-    if (p.x < -p.r) p.x = viewW + p.r;
-    if (p.x > viewW + p.r) p.x = -p.r;
-    if (p.y < -p.r) p.y = viewH + p.r;
-    if (p.y > viewH + p.r) p.y = -p.r;
-  });
+    p.life -= 0.0035;
+    if (p.life <= 0 || p.y < -4) resetParticle(p, false);
+  }
   if (!reduceMotion) requestAnimationFrame(drawParticles);
 }
 drawParticles();
